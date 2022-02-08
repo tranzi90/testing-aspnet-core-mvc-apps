@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimulator.Web", "src\AtmSimulator.Web\AtmSimulator.Web.csproj", "{F11372FB-EF21-4023-8983-A39B5C44BDF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSImulator.UnitTests", "tests\AtmSImulator.UnitTests\AtmSImulator.UnitTests.csproj", "{52CB8489-C001-42C5-8626-6216BBA725F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimulator.IntegrationTests", "tests\AtmSimulator.IntegrationTests\AtmSimulator.IntegrationTests.csproj", "{5D2AE582-5A56-43F6-BBB0-4F08E67E42C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmSimulator.FunctionalTests", "tests\AtmSimulator.FunctionalTests\AtmSimulator.FunctionalTests.csproj", "{C227361B-C302-4160-A6E5-B37727B21B3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F11372FB-EF21-4023-8983-A39B5C44BDF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11372FB-EF21-4023-8983-A39B5C44BDF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11372FB-EF21-4023-8983-A39B5C44BDF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11372FB-EF21-4023-8983-A39B5C44BDF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52CB8489-C001-42C5-8626-6216BBA725F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52CB8489-C001-42C5-8626-6216BBA725F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52CB8489-C001-42C5-8626-6216BBA725F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52CB8489-C001-42C5-8626-6216BBA725F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D2AE582-5A56-43F6-BBB0-4F08E67E42C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D2AE582-5A56-43F6-BBB0-4F08E67E42C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D2AE582-5A56-43F6-BBB0-4F08E67E42C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D2AE582-5A56-43F6-BBB0-4F08E67E42C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C227361B-C302-4160-A6E5-B37727B21B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C227361B-C302-4160-A6E5-B37727B21B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C227361B-C302-4160-A6E5-B37727B21B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C227361B-C302-4160-A6E5-B37727B21B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C62C781-9FEC-4F3B-9914-5C8C804A168E}
+	EndGlobalSection
+EndGlobal
