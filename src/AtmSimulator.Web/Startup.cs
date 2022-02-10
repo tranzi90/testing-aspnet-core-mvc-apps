@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AtmSimulator.Web.Middlewares;
+using AtmSimulator.Web.Models.Application;
+using AtmSimulator.Web.Models.Domain;
+using CSharpFunctionalExtensions;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +26,15 @@ namespace AtmSimulator.Web
         {
             services
                 .AddControllersWithViews()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>()); ;
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+
+            services.AddTransient<TransferService>();
+            services.AddTransient<PaymentCardGenerator>();
+            services.AddTransient<IRandomGenerator, BasicRandomGenerator>();
+            services.AddTransient<IDateTimeProvider, UtcDateTimeProvider>();
+            services.AddTransient<IFinancialInformationService, FinancialInformationService>();
+            services.AddTransient<IFinancialInstitutionService, FinancialInstitutionService>();
+            services.AddTransient<IFinancialTransferSystemService, FinancialTransferSystemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,10 +55,18 @@ namespace AtmSimulator.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
+            app.UseMiddleware<CorrelationIdResponderMiddleware>();
+
+            app.UseMiddleware<CurrentDateTimeProviderMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
