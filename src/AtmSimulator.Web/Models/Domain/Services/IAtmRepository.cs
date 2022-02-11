@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 
 namespace AtmSimulator.Web.Models.Domain
@@ -10,5 +11,7 @@ namespace AtmSimulator.Web.Models.Domain
         Maybe<Atm> Get(Guid id);
 
         Result Update(Atm atm);
+
+        IReadOnlyCollection<Atm> GetAll();
     }
 }

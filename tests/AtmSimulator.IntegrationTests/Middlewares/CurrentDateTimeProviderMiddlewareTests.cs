@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace AtmSimulator.IntegrationTests.Middlewares
 {
     [TestFixture]
-    public class CurrentDateTimeProviderMiddlewareTests : BaseTest
+    public class CurrentDateTimeProviderMiddlewareTests : BaseWebHostTest
     {
         private const string MiddlewareBaseAddress = "/current-unix-time-seconds";
 
@@ -17,7 +17,7 @@ namespace AtmSimulator.IntegrationTests.Middlewares
         [SetUp]
         public void SetUp()
         {
-            _httpClient = Host.GetTestServer().CreateClient();
+            _httpClient = TestServer.CreateClient();
 
             _httpClient.BaseAddress = new Uri(_httpClient.BaseAddress, MiddlewareBaseAddress);
         }

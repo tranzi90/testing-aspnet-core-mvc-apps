@@ -1,26 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using AtmSimulator.Web.Models;
+using AtmSimulator.Web.Models.Domain;
+using AtmSimulator.Web.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AtmSimulator.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IAtmRepository _atmRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            IAtmRepository atmRepository)
         {
-            _logger = logger;
+            _atmRepository = atmRepository;
         }
 
-        public IActionResult Index()
+        public ActionResult<HomeIndexViewModel> Index()
         {
-            return View();
+            var atms = _atmRepository.GetAll();
+
+            var atmViewModels = atms
+                .Select(x => new AtmViewModel
+                {
+                    Id = x.Id,
+                    Balance = x.Balance,
+                })
+                .ToArray();
+
+            var viewModel = new HomeIndexViewModel
+            {
+                Atms = atmViewModels
+            };
+
+            ViewData["TotalCount"] = atmViewModels.Length;
+            ViewBag.TotalCount = atmViewModels.Length;
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

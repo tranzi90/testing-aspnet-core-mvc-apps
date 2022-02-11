@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace AtmSimulator.IntegrationTests.Controllers
 {
     [TestFixture]
-    public class ConfigurationControllerTests : BaseTest
+    public class ConfigurationControllerTests : BaseWebHostTest
     {
         private const string ControllerBaseAddress = "/api/v1/configurations/";
 
@@ -19,7 +19,7 @@ namespace AtmSimulator.IntegrationTests.Controllers
         [SetUp]
         public void SetUp()
         {
-            _httpClient = Host.GetTestServer().CreateClient();
+            _httpClient = TestServer.CreateClient();
 
             _httpClient.BaseAddress = new Uri(_httpClient.BaseAddress, ControllerBaseAddress);
         }

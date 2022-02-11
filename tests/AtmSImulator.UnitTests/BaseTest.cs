@@ -4,7 +4,7 @@ using Bogus;
 using NSubstitute;
 using NUnit.Framework;
 
-[assembly: Parallelizable(ParallelScope.Children)]
+[assembly: Parallelizable(ParallelScope.Fixtures)]
 [assembly: LevelOfParallelism(4)]
 
 namespace AtmSimulator.UnitTests
@@ -18,6 +18,8 @@ namespace AtmSimulator.UnitTests
         protected PaymentCardNumberFakeData FakePaymentCardNumbers { get; private set; }
 
         protected PaymentCardFakeData FakePaymentCards { get; private set; }
+
+        protected AtmFakeData FakeAtms { get; private set; }
 
         protected IRandomGenerator RandomGenerator { get; private set; }
 
@@ -39,6 +41,7 @@ namespace AtmSimulator.UnitTests
             FakeCustomerNames = new CustomerNameFakeData(seed);
             FakePaymentCardNumbers = new PaymentCardNumberFakeData(seed);
             FakePaymentCards = new PaymentCardFakeData(seed, FakePaymentCardNumbers);
+            FakeAtms = new AtmFakeData(seed);
             RandomGenerator = Substitute.For<IRandomGenerator>();
             RandomGenerator.NextPositiveShort().Returns(x => Faker.Random.Short(1));
             RandomGenerator.NewGuid().Returns(x => Guid.NewGuid());

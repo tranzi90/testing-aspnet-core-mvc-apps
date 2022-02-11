@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using AtmSimulator.Web.ViewModels
+@model HomeIndexViewModel
+@{
+  ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+  <h1 class="display-4">Welcome</h1>
+  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+  <table id="atms">
+    @foreach (var atm in Model.Atms)
+    {
+      <tr>
+        <td>
+          @atm.Id
+        </td>
+        <td>
+          @atm.Balance.ToString("C2")
+        </td>
+      </tr>
+    }
+  </table>
+
+  <p id="total-count-viewdata">@ViewData["TotalCount"]</p>
+  <p id="total-count-viewbag">@ViewBag.TotalCount</p>
 </div>

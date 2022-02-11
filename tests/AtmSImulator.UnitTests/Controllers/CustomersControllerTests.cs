@@ -43,7 +43,7 @@ namespace AtmSimulator.UnitTests.Controllers
             var registeredCustomerResponse = customersController.RegisterCustomer(registerCustomerRequest);
 
             // Asssert
-            var registeredCustomerDto = registeredCustomerResponse.GetInnerValue();
+            var registeredCustomerDto = registeredCustomerResponse.GetFromObjectResult();
 
             Assert.Multiple(() =>
             {
@@ -79,7 +79,7 @@ namespace AtmSimulator.UnitTests.Controllers
             var cashResponse = customersController.GetCash(customerName.Name);
 
             // Asssert
-            var cash = cashResponse.GetInnerValue();
+            var cash = cashResponse.GetFromObjectResult();
 
             Assert.Multiple(() =>
             {

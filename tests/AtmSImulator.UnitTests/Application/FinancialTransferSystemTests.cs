@@ -136,8 +136,10 @@ namespace AtmSimulator.UnitTests.Application
         public void Customer_can_transfer_to_another_customer()
         {
             // Arrange
+            var customerNameGenerator = FakeCustomerNames.Valid;
+
             var senderAccountId = Faker.Random.Guid();
-            var senderCustomerName = FakeCustomerNames.Valid.Generate();
+            var senderCustomerName = customerNameGenerator.Generate();
             var senderPaymentCard = FakePaymentCards.ValidForCustomer(senderCustomerName).Generate();
             var sender = Account.Create(
                 senderAccountId,
@@ -149,7 +151,7 @@ namespace AtmSimulator.UnitTests.Application
                 });
 
             var recipientAccountId = Faker.Random.Guid();
-            var recipientCustomerName = FakeCustomerNames.Valid.Generate();
+            var recipientCustomerName = customerNameGenerator.Generate();
             var recipientPaymentCard = FakePaymentCards.ValidForCustomer(recipientCustomerName).Generate();
             var recipient = Account.Create(
                 recipientAccountId,
