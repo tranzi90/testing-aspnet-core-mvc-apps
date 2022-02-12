@@ -16,12 +16,12 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var atm = FakeAtms.Valid.Generate();
             var dal = atm.ToDal();
 
-            GlobalTransactionScopeTestSetUp.Context.Atms.Add(dal);
+            Context.Atms.Add(dal);
 
-            GlobalTransactionScopeTestSetUp.Context.SaveChanges();
+            Context.SaveChanges();
 
             // Act
-            var dalFromRepo = GlobalTransactionScopeTestSetUp.AtmRepository.Get(atm.Id);
+            var dalFromRepo = AtmRepository.Get(atm.Id);
 
             // Assert
             dalFromRepo.HasValue.Should().BeTrue();
@@ -36,12 +36,12 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var atms = FakeAtms.Valid.Generate(10);
             var dals = atms.Select(x => x.ToDal()).ToArray();
 
-            GlobalTransactionScopeTestSetUp.Context.Atms.AddRange(dals);
+            Context.Atms.AddRange(dals);
 
-            GlobalTransactionScopeTestSetUp.Context.SaveChanges();
+            Context.SaveChanges();
 
             // Act
-            var dalsFromRepo = GlobalTransactionScopeTestSetUp.AtmRepository.GetAll();
+            var dalsFromRepo = AtmRepository.GetAll();
 
             // Assert
             dalsFromRepo.Should().BeEquivalentTo(dals);
@@ -55,12 +55,12 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var dal = atm.ToDal();
 
             // Act
-            var registerResult = GlobalTransactionScopeTestSetUp.AtmRepository.Register(atm);
+            var registerResult = AtmRepository.Register(atm);
 
             // Assert
             registerResult.IsSuccess.Should().BeTrue();
 
-            var registeredDal = GlobalTransactionScopeTestSetUp.Context.Atms.First(x => x.Id == atm.Id);
+            var registeredDal = Context.Atms.First(x => x.Id == atm.Id);
 
             registeredDal.Should().BeEquivalentTo(dal);
         }
@@ -72,20 +72,20 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var originalAtm = FakeAtms.Valid.Generate();
             var originalDal = originalAtm.ToDal();
 
-            GlobalTransactionScopeTestSetUp.Context.Atms.Add(originalDal);
+            Context.Atms.Add(originalDal);
 
-            GlobalTransactionScopeTestSetUp.Context.SaveChanges();
+            Context.SaveChanges();
 
             var updatedAtm = Atm.Create(originalAtm.Id, decimal.One);
             var updatedDal = updatedAtm.ToDal();
 
             // Act
-            var updateResult = GlobalTransactionScopeTestSetUp.AtmRepository.Update(updatedAtm);
+            var updateResult = AtmRepository.Update(updatedAtm);
 
             // Assert
             updateResult.IsSuccess.Should().BeTrue();
 
-            var registeredDal = GlobalTransactionScopeTestSetUp.Context.Atms.First(x => x.Id == updatedAtm.Id);
+            var registeredDal = Context.Atms.First(x => x.Id == updatedAtm.Id);
 
             registeredDal.Should().BeEquivalentTo(updatedDal);
         }

@@ -64,7 +64,23 @@ namespace AtmSimulator.Web.Controllers
 
             var customerCash = _financialInformation.CheckCustomerCash(customerNameDomain.Value);
 
-            return CreatedUnprocessableResult(customerCash, x => x);
+            return OkUnprocessableResult(customerCash, x => x);
+        }
+
+        [HttpPost("{customerName}/payment-cards")]
+        public ActionResult<IssuedNewPaymentCardResponseDto> IssueNewPaymentCard(
+            [FromRoute] string customerName)
+        {
+            var customerNameDomain = CustomerName.TryCreate(customerName);
+
+            if (customerNameDomain.IsFailure)
+            {
+                return BadRequest(customerNameDomain.Error);
+            }
+
+            var newPaymentCard = _financialInstituion.IssueNewPaymentCard(customerNameDomain.Value);
+
+            return CreatedUnprocessableResult(newPaymentCard, x => x.ToDto());
         }
     }
 }

@@ -89,7 +89,6 @@ namespace AtmSimulator.Web.Models.Domain
                         && forbiddenTimeToBind.Month < now.Month;
             },
                 "Can bind only one card per month.")
-            .Ensure(() => Balance > 0, "Can't bind payment card to account with zero balance.")
             .Ensure(() => paymentCard.CardholderName == CustomerName, "Payment card MUST be bind to its own cardholder's account only.")
             .Tap(() => _paymentCards.Add(paymentCard));
 

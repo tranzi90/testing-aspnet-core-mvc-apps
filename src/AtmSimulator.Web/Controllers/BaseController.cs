@@ -31,6 +31,15 @@ namespace AtmSimulator.Web.Controllers
                 StatusCodes.Status200OK,
                 StatusCodes.Status422UnprocessableEntity);
 
+        protected ActionResult<TDto> OkUnprocessableResult<T, TDto>(
+            Result<T> result,
+            Func<T, TDto> converter)
+            => GenericResult(
+                result,
+                converter,
+                StatusCodes.Status200OK,
+                StatusCodes.Status422UnprocessableEntity);
+
         protected ActionResult<TDto> CreatedUnprocessableResult<T, TDto>(
             Result<T> result,
             Func<T, TDto> converter)

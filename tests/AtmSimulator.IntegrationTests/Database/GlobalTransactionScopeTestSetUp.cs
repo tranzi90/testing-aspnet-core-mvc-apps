@@ -1,7 +1,6 @@
 ﻿using AtmSimulator.Web.Database;
 using AtmSimulator.Web.Models.Application;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -9,16 +8,11 @@ using NUnit.Framework;
 namespace AtmSimulator.IntegrationTests.Database.TransactionTests
 {
     [SetUpFixture]
-    [Parallelizable(ParallelScope.None)]
     public class GlobalTransactionScopeTestSetUp
     {
-        private const string DatabaseName = nameof(GlobalTransactionScopeTestSetUp);
+        public static readonly string ConnectionString = $"Server=(localdb)\\mssqllocaldb;Database={nameof(GlobalTransactionScopeTestSetUp)};Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        public static AtmSimulatorDbContext Context { get; private set; }
-
-        public static SqlAtmRepository AtmRepository { get; private set; }
-
-        public static SqlCustomerRepository CustomerRepository { get; private set; }
+        private static AtmSimulatorDbContext _baseContext;
 
         [OneTimeSetUp]
         public void TestOneTimeSetUp()
@@ -30,23 +24,20 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var builder = new DbContextOptionsBuilder<AtmSimulatorDbContext>();
 
             builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            builder.UseSqlServer($"Server=(localdb)\\mssqllocaldb;Database={DatabaseName};Trusted_Connection=True;MultipleActiveResultSets=true")
+            builder.UseSqlServer(ConnectionString)
                 .UseInternalServiceProvider(serviceProvider);
 
-            Context = new AtmSimulatorDbContext(builder.Options);
-            Context.Database.EnsureDeleted();
-            Context.Database.Migrate();
-
-            AtmRepository = new SqlAtmRepository(Context);
-            CustomerRepository = new SqlCustomerRepository(Context);
+            _baseContext = new AtmSimulatorDbContext(builder.Options);
+            _baseContext.Database.EnsureDeleted();
+            _baseContext.Database.Migrate();
         }
 
         [OneTimeTearDown]
         public void TestOneTimeTearDown()
         {
-            Context.Database.EnsureDeleted();
+            _baseContext.Database.EnsureDeleted();
 
-            Context.Dispose();
+            _baseContext.Dispose();
         }
     }
 
@@ -54,29 +45,38 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
     {
         private IDbContextTransaction _transaction;
 
+        protected AtmSimulatorDbContext Context { get; private set; }
+
+        protected SqlAtmRepository AtmRepository { get; private set; }
+
+        protected SqlCustomerRepository CustomerRepository { get; private set; }
+
         [SetUp]
         public void TestSetUp()
         {
-            DetachEntries(GlobalTransactionScopeTestSetUp.Context.Atms.Local);
-            DetachEntries(GlobalTransactionScopeTestSetUp.Context.Customers.Local);
+            var services = new ServiceCollection()
+                .AddDbContext<AtmSimulatorDbContext>(builder =>
+                {
+                    builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    builder.UseSqlServer(GlobalTransactionScopeTestSetUp.ConnectionString);
+                });
 
-            _transaction = GlobalTransactionScopeTestSetUp.Context.Database
+            var serviceProvider = services.BuildServiceProvider();
+
+            Context = serviceProvider.GetRequiredService<AtmSimulatorDbContext>();
+            AtmRepository = new SqlAtmRepository(Context);
+            CustomerRepository = new SqlCustomerRepository(Context);
+
+            _transaction = Context.Database
                 .BeginTransaction(System.Data.IsolationLevel.Serializable);
-        }
-
-        private void DetachEntries<T>(LocalView<T> localView)
-            where T : class
-        {
-            foreach (var entry in localView)
-            {
-                GlobalTransactionScopeTestSetUp.Context.Entry(entry).State = EntityState.Detached;
-            }
         }
 
         [TearDown]
         public void TestTearDown()
         {
             _transaction.Dispose();
+
+            Context.Dispose();
         }
     }
 }

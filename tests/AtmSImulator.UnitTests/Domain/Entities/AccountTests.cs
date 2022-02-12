@@ -436,32 +436,6 @@ namespace AtmSimulator.UnitTests.Domain.Entities
         }
 
         [Test]
-        public void Binding_of_card_with_zero_account_balance_is_Failure()
-        {
-            // Arrange
-            var customerName = FakeCustomerNames.Valid.Generate();
-
-            var account = Account.Create(
-                Faker.Random.Guid(),
-                customerName,
-                decimal.Zero,
-                Array.Empty<PaymentCard>());
-
-            var paymentCardsFakeGenerator = FakePaymentCards.ValidForCustomer(customerName);
-            var paymentCard = paymentCardsFakeGenerator.Generate();
-
-            // Act
-            var bindResult = account.BindCard(paymentCard, DateTimeOffset.UtcNow);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                bindResult.IsFailure.Should().BeTrue();
-                account.PaymentCards.Should().NotContain(paymentCard);
-            });
-        }
-
-        [Test]
         public void Binding_of_card_with_other_customer_name_is_Failure()
         {
             // Arrange

@@ -16,12 +16,12 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var customer = FakeCustomers.Valid().Generate();
             var dal = customer.ToDal();
 
-            GlobalTransactionScopeTestSetUp.Context.Customers.Add(dal);
+            Context.Customers.Add(dal);
 
-            GlobalTransactionScopeTestSetUp.Context.SaveChanges();
+            Context.SaveChanges();
 
             // Act
-            var dalFromRepo = GlobalTransactionScopeTestSetUp.CustomerRepository.Get(customer.Name);
+            var dalFromRepo = CustomerRepository.Get(customer.Name);
 
             // Assert
             dalFromRepo.HasValue.Should().BeTrue();
@@ -37,12 +37,12 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var dal = customer.ToDal();
 
             // Act
-            var registerResult = GlobalTransactionScopeTestSetUp.CustomerRepository.Register(customer);
+            var registerResult = CustomerRepository.Register(customer);
 
             // Assert
             registerResult.IsSuccess.Should().BeTrue();
 
-            var registeredDal = GlobalTransactionScopeTestSetUp.Context.Customers.First(x => x.Name == customer.Name.Name);
+            var registeredDal = Context.Customers.First(x => x.Name == customer.Name.Name);
 
             registeredDal.Should().BeEquivalentTo(dal);
         }
@@ -54,20 +54,20 @@ namespace AtmSimulator.IntegrationTests.Database.TransactionTests
             var originalCustomer = FakeCustomers.Valid().Generate();
             var originalDal = originalCustomer.ToDal();
 
-            GlobalTransactionScopeTestSetUp.Context.Customers.Add(originalDal);
+            Context.Customers.Add(originalDal);
 
-            GlobalTransactionScopeTestSetUp.Context.SaveChanges();
+            Context.SaveChanges();
 
             var updatedCustomer = Customer.Create(originalCustomer.Name, decimal.One, Faker.Random.Guid());
             var updatedDal = updatedCustomer.ToDal();
 
             // Act
-            var updateResult = GlobalTransactionScopeTestSetUp.CustomerRepository.Update(updatedCustomer);
+            var updateResult = CustomerRepository.Update(updatedCustomer);
 
             // Assert
             updateResult.IsSuccess.Should().BeTrue();
 
-            var registeredDal = GlobalTransactionScopeTestSetUp.Context.Customers.First(x => x.Name == updatedCustomer.Name.Name);
+            var registeredDal = Context.Customers.First(x => x.Name == updatedCustomer.Name.Name);
 
             registeredDal.Should().BeEquivalentTo(updatedDal);
         }

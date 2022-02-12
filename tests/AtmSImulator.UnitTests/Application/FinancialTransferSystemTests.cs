@@ -52,7 +52,7 @@ namespace AtmSimulator.UnitTests.Application
             // Act
             var depositResult = financialTransferSystemService.DepositToAtm(paymentCard.Number, atm.Id, decimal.One);
 
-            // Result
+            // Assert
             depositResult.IsSuccess.Should().BeTrue();
 
             Assert.Multiple(() =>
@@ -113,7 +113,7 @@ namespace AtmSimulator.UnitTests.Application
             // Act
             var withdrawResult = financialTransferSystemService.WithdrawFromAtm(paymentCard.Number, atm.Id, decimal.One);
 
-            // Result
+            // Assert
             withdrawResult.IsSuccess.Should().BeTrue();
 
             Assert.Multiple(() =>
@@ -184,7 +184,7 @@ namespace AtmSimulator.UnitTests.Application
                 recipientPaymentCard.Number,
                 decimal.One);
 
-            // Result
+            // Assert
             transferResult.IsSuccess.Should().BeTrue();
 
             Assert.Multiple(() =>
